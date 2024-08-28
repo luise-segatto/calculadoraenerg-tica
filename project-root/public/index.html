@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo de Consumo Energético</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+   
+<div class="loader">
+  <div class="box box-1">
+    <div class="side-left"></div>
+    <div class="side-right"></div>
+    <div class="side-top"></div>
+  </div>
+  <div class="box box-2">
+    <div class="side-left"></div>
+    <div class="side-right"></div>
+    <div class="side-top"></div>
+  </div>
+  <div class="box box-3">
+    <div class="side-left"></div>
+    <div class="side-right"></div>
+    <div class="side-top"></div>
+  </div>
+  <div class="box box-4">
+    <div class="side-left"></div>
+    <div class="side-right"></div>
+    <div class="side-top"></div>
+  </div>
+</div>
+    
+<form id="calcForm" class="form">
+  <div class="flex-column">
+    <h1>Calculadora Energética</h1>
+    
+  
+  <div class="flex-column">
+    <label for="category">Selecione a Categoria</label>
+    <select id="category" class="input">
+      <option value="sala">Sala</option>
+      <option value="cozinha">Cozinha</option>
+      <option value="quarto">Quarto</option>
+      <option value="banheiro">Banheiro</option>
+    </select>
+  </div>
+
+  <div class="flex-column">
+    <label for="appliance">Selecione o Eletrodoméstico</label>
+    <select id="appliance" class="input">
+      <!-- Opções serão preenchidas dinamicamente -->
+    </select>
+  </div>
+
+  <div class="flex-column">
+    <label for="hours">Horas de Uso por Dia</label>
+    <input type="number" id="hours" class="input" placeholder="Digite as horas de uso" required/>
+  </div>
+  
+  <button type="submit" class="button-submit">Calcular consumo</button>
+</form>
+
+<div id="result" class="result"></div>
+
+<script>
+    const appliancesByCategory = {
+        sala: [
+            { name: 'Televisão', power: 150 },
+            { name: 'Lâmpada', power: 60 },
+            { name: 'Ventilador', power: 75 }
+        ],
+        cozinha: [
+            { name: 'Geladeira', power: 150 },
+            { name: 'Fogão', power: 1000 },
+            { name: 'Microondas', power: 1200 },
+            { name: 'Airfryer', power: 127 }
+        ],
+        quarto: [
+            { name: 'Ar-condicionado', power: 2000 },
+            { name: 'Lâmpada', power: 60 },
+            { name: 'Ventilador', power: 75 }
+        ],
+        banheiro: [
+            { name: 'Chuveiro', power: 4500 },
+            { name: 'Secador de Cabelo', power: 1200 },
+            { name: 'Lâmpada', power: 60 }
+        ]
+    };
+
+    document.getElementById('category').addEventListener('change', function () {
+        const category = this.value;
+        const applianceSelect = document.getElementById('appliance');
+        applianceSelect.innerHTML = '';
+
+        appliancesByCategory[category].forEach(appliance => {
+            const option = document.createElement('option');
+            option.value = appliance.power;
+            option.textContent = appliance.name;
+            applianceSelect.appendChild(option);
+        });
+    });
+
+    document.getElementById('calcForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const power = parseFloat(document.getElementById('appliance').value);
+        const hours = parseFloat(document.getElementById('hours').value);
+        const dailyConsumption = (hours * power) / 1000; // Converte W para kWh
+
+        document.getElementById('result').innerHTML = `Consumo diário: ${dailyConsumption.toFixed(2)} kWh`;
+    });
+
+    // Trigger a change event to populate the initial appliances
+    document.getElementById('category').dispatchEvent(new Event('change'));
+</script>
+
+</body>
+</html>
